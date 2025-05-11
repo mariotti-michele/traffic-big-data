@@ -1,0 +1,3 @@
+chmod +x nomeFile.sh 	per rendere eseguibili gli sh
+
+sui worker serve solo il relativo sh start e stop, e il jar kafka-producer
