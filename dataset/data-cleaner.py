@@ -31,4 +31,16 @@ df_joint["Postazione"] = (
 
 df_joint = df_joint[df_joint["Transiti - Totale"] != 0]
 
-df_joint.to_csv("traffic-dataset.csv", index=False)
+postazioni_uniche = sorted(df_joint["Postazione"].unique())
+metà = len(postazioni_uniche) // 2
+postazioni_A = set(postazioni_uniche[:metà])
+postazioni_B = set(postazioni_uniche[metà:])
+
+df_A = df_joint[df_joint["Postazione"].isin(postazioni_A)]
+df_B = df_joint[df_joint["Postazione"].isin(postazioni_B)]
+
+df_A = df_A.sort_values(by=["Giorno", "Postazione"])
+df_B = df_B.sort_values(by=["Giorno", "Postazione"])
+
+df_A.to_csv(os.path.join("dataset", "traffic-dataset-half-A.csv"), index=False)
+df_B.to_csv(os.path.join("dataset", "traffic-dataset-half-B.csv"), index=False)
