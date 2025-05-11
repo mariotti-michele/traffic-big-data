@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-file_csv = [os.path.join("data", f) for f in os.listdir("data") if f.endswith('.csv')]
+file_csv = [os.path.join("dataset", f) for f in os.listdir("dataset") if f.endswith('.csv')]
 
 column_to_keep = ["Giorno", "Postazione", "Strada", "Transiti - Totale"]
 
