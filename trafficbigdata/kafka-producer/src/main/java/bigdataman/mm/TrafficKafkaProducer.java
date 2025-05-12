@@ -13,7 +13,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 public class TrafficKafkaProducer {
 
     private static final String TOPIC = "traffic";
-    private static final String BROKER = "192.168.56.101:9092"; // IP del nodo master
+    private static final String BROKER = "192.168.56.101:9092"; // IP del nodo master 
     private static final int NUM_DATA_SENT_EACH_TIME = 10;
     private static final int SECONDS_INTERVAL = 5;
 
