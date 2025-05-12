@@ -1,7 +1,8 @@
 package bigdataman.mm;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -28,8 +29,9 @@ public class TrafficKafkaProducer {
 
     private static void sendData(int sensorId) {
         try (KafkaProducer<String, String> producer = new KafkaProducer<>(getProperties(sensorId))) {
-            String filePath = "src/main/resources/traffic-dataset-half-" + sensorId + ".csv";
-            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String filePath = "traffic-dataset-half-" + sensorId + ".csv";
+            InputStream input = TrafficKafkaProducer.class.getClassLoader().getResourceAsStream(filePath);
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
                 String line;
                 int count = 0;
                 while ((line = br.readLine()) != null) {
