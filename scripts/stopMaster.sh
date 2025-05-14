@@ -8,6 +8,10 @@ sleep 7
 
 echo "Arresto Zookeeper..."
 zookeeper-server-stop.sh
+sleep 7
+
+echo "Arresto MongoDB..."
+sudo service mongod stop
 
 echo "Servizi arrestati correttamente."
-sleep 7
+sleep 10
