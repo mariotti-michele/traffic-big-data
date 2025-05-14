@@ -15,8 +15,8 @@ public class TrafficKafkaProducer {
 
     private static final String TOPIC = "traffic";
     private static final String BROKER = "192.168.56.101:9092"; // IP del nodo master 
-    private static final int NUM_DATA_SENT_EACH_TIME = 10;
-    private static final int SECONDS_INTERVAL = 5;
+    private static String currentDate = "01/01/2025";
+    private static final int SECONDS_INTERVAL = 20;
 
     private static Properties getProperties(int sensorId) {
         Properties props = new Properties();
@@ -33,15 +33,15 @@ public class TrafficKafkaProducer {
             InputStream input = TrafficKafkaProducer.class.getClassLoader().getResourceAsStream(filePath);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
                 String line;
-                int count = 0;
                 while ((line = br.readLine()) != null) {
-                    String station = line.split(",")[1];
+                    String station = line.split(",")[2];
+                    String date = line.split(",")[0];
                     ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, station, line);
                     producer.send(record);
                     System.out.println("Sent: " + line);
-                    count++;
-                    if(count == NUM_DATA_SENT_EACH_TIME) {
-                        count = 0;
+                    if(!date.equals(currentDate)) {
+                        producer.send(new ProducerRecord<>(TOPIC, "SYSTEM", "END_OF_DAY:" + currentDate));
+                        currentDate = date;
                         TimeUnit.SECONDS.sleep(SECONDS_INTERVAL);
                     }
                 }
