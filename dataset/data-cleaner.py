@@ -3,7 +3,7 @@ import os
 
 file_csv = [os.path.join("dataset", f) for f in os.listdir("dataset") if f.endswith('.csv')]
 
-column_to_keep = ["Giorno", "Postazione", "Strada", "Transiti - Totale"]
+column_to_keep = ["Giorno", "N Giorno Settimana", "Postazione", "Strada", "Transiti - Totale"]
 
 df_joint = pd.concat(
     [pd.read_csv(f, sep=';', quotechar='"', encoding='utf-8') for f in file_csv],
@@ -24,6 +24,13 @@ df_joint["Transiti - Totale"] = (
 
 df_joint["Postazione"] = (
     df_joint["Postazione"]
+    .fillna(0)
+    .astype(float)
+    .astype(int)
+)
+
+df_joint["N Giorno Settimana"] = (
+    df_joint["N Giorno Settimana"]
     .fillna(0)
     .astype(float)
     .astype(int)
