@@ -56,10 +56,18 @@ public class SparkBatchProcessor {
                 Dataset<Row> data = dfFiltered
                     .filter(col("value").startsWith(currentDateString))
                     .selectExpr(
-                        "split(value, ',')[0] as data",
-                        "split(value, ',')[1] as giorno_settimana",
-                        "split(value, ',')[2] as postazione_id",
-                        "CAST(split(value, ',')[3] AS INT) as totale_transiti"
+                        "split(value, ',')[2] as station_id",
+                        "split(value, ',')[3] as station_name",
+                        "split(value, ',')[0] as date",
+                        "CAST(split(value, ',')[4] AS INT) as total_transits",
+                        "split(value, ',')[1] as day_of_week",
+                        "split(value, ',')[4] as week"
+                    ).withColumn("date", to_date(col("date"), "dd/MM/yyyy"))
+                    .withColumn("week",
+                        when(col("date").lt(lit("2025-01-06")), lit(1))
+                            .otherwise(
+                                floor(datediff(col("date"), lit("2025-01-06")).divide(7)).plus(2)
+                            )
                     );
 
                 data.write()
