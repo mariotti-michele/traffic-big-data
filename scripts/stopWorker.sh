@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export SPARK_HOME=/home/diabd/Desktop/spark
 export PATH="$PATH:$SPARK_HOME/sbin"
 
 echo "Arresto Spark Worker..."
