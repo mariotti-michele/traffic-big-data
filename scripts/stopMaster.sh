@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export SPARK_HOME=/home/diabd/Desktop/spark
 export PATH="$PATH:$SPARK_HOME/sbin"
 export PATH="$PATH:$HOME/kafka/bin"
 
@@ -17,6 +18,7 @@ sleep 7
 
 echo "Arresto MongoDB..."
 sudo service mongod stop
+sleep 7
 
 echo "Servizi arrestati correttamente."
 sleep 10

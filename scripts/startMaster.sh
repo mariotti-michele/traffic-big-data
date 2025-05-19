@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export SPARK_HOME=/home/diabd/Desktop/spark
 export PATH="$PATH:$SPARK_HOME/sbin"
 export PATH="$PATH:$SPARK_HOME/bin"
 export PATH="$PATH:$HOME/kafka/bin"
@@ -18,8 +19,4 @@ sleep 7
 
 echo "Avvio Spark Master..."
 start-master.sh
-
-echo "Avvio Spark Batch Processor..."
-spark-submit \
-  --class bigdataman.mm.SparkBatchProcessor \
-  spark-batch-processor-1.0-SNAPSHOT.jar
+sleep 7

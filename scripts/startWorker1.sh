@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export PATH="$PATH:$SPARK_HOME/sbin"
-export PATH="$HOME/spark"
 
 echo "Avvio MongoDB..."
 sudo service mongod start &
