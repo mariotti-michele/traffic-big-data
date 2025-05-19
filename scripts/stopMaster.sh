@@ -1,6 +1,11 @@
 #!/bin/bash
 
+export PATH="$PATH:$SPARK_HOME/sbin"
 export PATH="$PATH:$HOME/kafka/bin"
+
+echo "Arresto Spark Master..."
+stop-master.sh
+sleep 7
 
 echo "Arresto Kafka..."
 kafka-server-stop.sh

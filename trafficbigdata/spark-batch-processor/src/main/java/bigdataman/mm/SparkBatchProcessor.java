@@ -14,7 +14,7 @@ public class SparkBatchProcessor {
     private static SparkSession startSparkSession() {
         SparkSession spark = SparkSession.builder()
             .appName("SparkBatchProcessor")
-            .master("local[*]")
+            .master("spark://192.168.56.101:7077")
             .config("spark.mongodb.output.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic.daily_transits?replicaSet=rstraffic&writeConcern=majority&readPreference=primaryPreferred&readConcernLevel=local")
             .getOrCreate();
         

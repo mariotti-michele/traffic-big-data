@@ -1,7 +1,14 @@
 #!/bin/bash
 
+export PATH="$PATH:$SPARK_HOME/sbin"
+export PATH="$HOME/spark"
+
 echo "Avvio MongoDB..."
 sudo service mongod start &
+sleep 10
+
+echo "[INFO] Avvio Spark Worker..."
+start-worker.sh spark://192.168.56.101:7077 &
 sleep 10
 
 echo "Avvio Kafka Producer sensore 1..."
