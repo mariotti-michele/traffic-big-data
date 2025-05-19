@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH="$PATH:$SPARK_HOME/sbin"
+export PATH="$PATH:$SPARK_HOME/bin"
 export PATH="$PATH:$HOME/kafka/bin"
 
 echo "Avvio MongoDB..."
