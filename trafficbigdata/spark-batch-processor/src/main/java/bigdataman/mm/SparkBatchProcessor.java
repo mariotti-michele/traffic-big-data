@@ -32,7 +32,7 @@ public class SparkBatchProcessor {
 
         while (true) {
 
-            long startOffset = Math.max(0, lastOffset - 500);
+            long startOffset = Math.max(0, lastOffset - 1000);
             String startingOffsets = String.format("{\"traffic\":{\"0\":%d}}", startOffset);
 
             dfKafka = spark.read()
@@ -48,7 +48,7 @@ public class SparkBatchProcessor {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String currentDateString = currentDate.format(formatter);
             String marker = "END_OF_DAY:" + currentDateString;
-            boolean isDayEnded = dfFiltered.filter(col("value").equalTo(marker)).count() > 0;
+            boolean isDayEnded = dfFiltered.filter(col("value").equalTo(marker)).count() == 2;
 
             if (isDayEnded) {
                 System.out.println("[INFO] Fine giornata " + currentDate + ". Elaboro dati...");

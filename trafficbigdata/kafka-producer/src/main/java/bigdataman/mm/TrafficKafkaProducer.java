@@ -36,14 +36,16 @@ public class TrafficKafkaProducer {
                 while ((line = br.readLine()) != null) {
                     String station = line.split(",")[2];
                     String date = line.split(",")[0];
-                    ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, station, line);
-                    producer.send(record);
-                    System.out.println("Sent: " + line);
+
                     if(!date.equals(currentDate)) {
                         producer.send(new ProducerRecord<>(TOPIC, "SYSTEM", "END_OF_DAY:" + currentDate));
                         currentDate = date;
                         TimeUnit.SECONDS.sleep(SECONDS_INTERVAL);
                     }
+
+                    ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, station, line);
+                    producer.send(record);
+                    System.out.println("Sent: " + line);
                 }
             }
         } catch (Exception e) {
