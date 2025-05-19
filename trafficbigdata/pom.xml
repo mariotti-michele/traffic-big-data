@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>kafka-producer</module>
-    <module>spark</module>
+    <module>spark-batch-processor</module>
   </modules>
 
   <name>trafficbigdata</name>
