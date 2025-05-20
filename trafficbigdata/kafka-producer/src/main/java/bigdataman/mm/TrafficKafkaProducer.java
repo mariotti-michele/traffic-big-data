@@ -38,7 +38,7 @@ public class TrafficKafkaProducer {
                     String date = line.split(",")[0];
 
                     if(!date.equals(currentDate)) {
-                        producer.send(new ProducerRecord<>(TOPIC, "SYSTEM", "END_OF_DAY:" + currentDate));
+                        producer.send(new ProducerRecord<>(TOPIC, "SYSTEM", "END_OF_DAY:" + currentDate + ", Sensor" + sensorId));
                         currentDate = date;
                         TimeUnit.SECONDS.sleep(SECONDS_INTERVAL);
                     }

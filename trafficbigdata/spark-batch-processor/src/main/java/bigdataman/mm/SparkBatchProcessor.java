@@ -83,7 +83,7 @@ public class SparkBatchProcessor {
 
     private static boolean isDayEnded(Dataset<Row> dfKafka, String currentDateString) {
         String marker = "END_OF_DAY:" + currentDateString;
-        boolean isDayEnded = dfKafka.filter(col("value").equalTo(marker)).count() == 2;
+        boolean isDayEnded = dfKafka.filter(col("value").startsWith(marker)).count() == 2;
         return isDayEnded;
     }
 
