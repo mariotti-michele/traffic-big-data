@@ -9,3 +9,5 @@ Per avviare il sistema, esegui in ordine dal nodo Master:
 Per arrestare l'esecuzione:
 1) stopWorkers.sh
 2) stopMaster.sh
+
+Per cancellare il database traffic di MongoDB esegui deleteDB.sh
