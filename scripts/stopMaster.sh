@@ -18,7 +18,6 @@ sleep 7
 
 echo "Arresto MongoDB..."
 sudo service mongod stop
-sleep 7
 
 echo "Servizi arrestati correttamente."
 sleep 10
