@@ -39,7 +39,7 @@ public class SparkBatchProcessor {
             );
 
         df.write()
-            .format("mongo")
+            .format("mongodb")
             .mode(SaveMode.Append)
             .option("collection", "daily_transits")
             .save();
@@ -49,7 +49,7 @@ public class SparkBatchProcessor {
 
     private static void updateStatistics(SparkSession spark) {
         Dataset<Row> df = spark.read()
-            .format("mongo")
+            .format("mongodb")
             .load()
             .withColumn("date", to_date(col("date"), "yyyy-MM-dd"));
 
@@ -75,7 +75,7 @@ public class SparkBatchProcessor {
             .join(updatedTo, "station_id");
 
         result.write()
-            .format("mongo")
+            .format("mongodb")
             .mode(SaveMode.Overwrite)
             .option("collection", "station_stats")
             .save();
