@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoraggio Traffico</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Monitoraggio Traffico per Postazione</h1>
+
+  <div class="select-wrapper">
+    <label for="stationSelect">Seleziona Postazione:</label>
+    <select id="stationSelect"></select>
+  </div>
+
+  <section>
+    <h2>Transiti giornalieri e relativa media</h2>
+    <canvas id="lineChart"></canvas>
+  </section>
+
+  <section>
+    <h2>Transiti medi per ogni giorno della settimana</h2>
+    <canvas id="barChartDay"></canvas>
+  </section>
+
+  <section>
+    <h2>Transiti totali settimanali</h2>
+    <canvas id="barChartWeek"></canvas>
+  </section>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
