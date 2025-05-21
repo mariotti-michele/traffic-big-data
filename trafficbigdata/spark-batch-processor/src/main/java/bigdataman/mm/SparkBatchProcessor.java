@@ -14,9 +14,9 @@ public class SparkBatchProcessor {
         SparkSession spark = SparkSession.builder()
             .appName("SparkBatchProcessor")
             .master("spark://192.168.56.101:7077")
-            .config("spark.mongodb.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic")
-            .config("spark.mongodb.read.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&readPreference=primaryPreferred&readConcernLevel=local")
-            .config("spark.mongodb.write.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&writeConcern=majority")
+            .config("spark.mongodb.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103")
+            .config("spark.mongodb.read.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103")
+            .config("spark.mongodb.write.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103")
             .getOrCreate();
         
         return spark;
@@ -43,6 +43,8 @@ public class SparkBatchProcessor {
         df.write()
             .format("mongodb")
             .mode(SaveMode.Append)
+            .option("replicaSet", "rstraffic")
+            .option("writeConcern.w", "majority")
             .option("database", "traffic")
             .option("collection", "daily_transits")
             .save();
@@ -52,7 +54,10 @@ public class SparkBatchProcessor {
 
     private static void updateStatistics(SparkSession spark) {
         Dataset<Row> df = spark.read()
-            .format("mongodb")
+            .format("mongodb") 
+            .option("replicaSet", "rstraffic")
+            .option("readConcern.level", "local")
+            .option("readPreference.name", "primaryPreferred")
             .option("database", "traffic")
             .option("collection", "daily_transits")
             .load()
@@ -82,6 +87,8 @@ public class SparkBatchProcessor {
         result.write()
             .format("mongodb")
             .mode(SaveMode.Overwrite)
+            .option("replicaSet", "rstraffic")
+            ///.option("writeConcern.w", "majority")
             .option("database", "traffic")
             .option("collection", "station_stats")
             .save();
