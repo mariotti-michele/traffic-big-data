@@ -26,18 +26,22 @@ public class SparkBatchProcessor {
         Dataset<Row> df = dfKafka
             .filter(col("value").startsWith(currentDateString))
             .selectExpr(
-                "split(value, ',')[2] as station_id",
+                "CAST(split(value, ',')[2] as INT) as station_id",
                 "split(value, ',')[3] as station_name",
                 "split(value, ',')[0] as date",
                 "CAST(split(value, ',')[4] AS INT) as total_transits",
-                "split(value, ',')[1] as day_of_week",
-                "split(value, ',')[4] as week"
-            ).withColumn("date", to_date(col("date"), "dd/MM/yyyy"))
-            .withColumn("week",
+                "CAST(split(value, ',')[1] AS INT) as day_of_week",
+                "CAST(split(value, ',')[4] AS INT) as week"
+            ).withColumn("date",
+                to_timestamp(
+                    concat(date_format(to_date(col("date"), "dd/MM/yyyy"), "yyyy-MM-dd"), lit(" 12:00:00")),
+                "yyyy-MM-dd HH:mm:ss"
+                )
+            ).withColumn("week",
                 when(col("date").lt(lit("2025-01-06")), lit(1))
                     .otherwise(
                         floor(datediff(col("date"), lit("2025-01-06")).divide(7)).plus(2)
-                    )
+                    ).cast("int")
             );
 
         df.write()
@@ -64,15 +68,15 @@ public class SparkBatchProcessor {
             .withColumn("date", to_date(col("date"), "yyyy-MM-dd"));
 
         Dataset<Row> dailyAvg = df.groupBy("station_id")
-            .agg(avg("total_transits").alias("daily_avg"));
+            .agg(avg("total_transits").cast("int").alias("daily_avg"));
 
         Dataset<Row> dayOfWeekAvg = df.groupBy("station_id", "day_of_week")
-            .agg(avg("total_transits").alias("value"))
+            .agg(avg("total_transits").cast("int").alias("value"))
             .groupBy("station_id")
             .agg(map_from_entries(collect_list(struct(col("day_of_week"), col("value")))).alias("day_of_week_avg"));
 
         Dataset<Row> weeklyTotal = df.groupBy("station_id", "week")
-            .agg(sum("total_transits").alias("value"))
+            .agg(sum("total_transits").cast("int").alias("value"))
             .groupBy("station_id")
             .agg(map_from_entries(collect_list(struct(col("week").cast("string"), col("value")))).alias("weekly_total"));
 
@@ -88,7 +92,7 @@ public class SparkBatchProcessor {
             .format("mongodb")
             .mode(SaveMode.Overwrite)
             .option("replicaSet", "rstraffic")
-            ///.option("writeConcern.w", "majority")
+            .option("writeConcern.w", "majority")
             .option("database", "traffic")
             .option("collection", "station_stats")
             .save();
