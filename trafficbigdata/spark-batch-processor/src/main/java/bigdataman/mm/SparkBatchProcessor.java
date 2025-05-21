@@ -41,6 +41,7 @@ public class SparkBatchProcessor {
         df.write()
             .format("mongodb")
             .mode(SaveMode.Append)
+            .option("database", "traffic")
             .option("collection", "daily_transits")
             .save();
 
@@ -77,6 +78,7 @@ public class SparkBatchProcessor {
         result.write()
             .format("mongodb")
             .mode(SaveMode.Overwrite)
+            .option("database", "traffic")
             .option("collection", "station_stats")
             .save();
     }
