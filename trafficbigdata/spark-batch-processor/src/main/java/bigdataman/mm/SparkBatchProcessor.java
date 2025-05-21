@@ -53,6 +53,8 @@ public class SparkBatchProcessor {
     private static void updateStatistics(SparkSession spark) {
         Dataset<Row> df = spark.read()
             .format("mongodb")
+            .option("database", "traffic")
+            .option("collection", "daily_transits")
             .load()
             .withColumn("date", to_date(col("date"), "yyyy-MM-dd"));
 
