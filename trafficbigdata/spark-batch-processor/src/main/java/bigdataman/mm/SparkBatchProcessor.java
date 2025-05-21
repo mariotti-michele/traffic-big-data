@@ -14,7 +14,9 @@ public class SparkBatchProcessor {
         SparkSession spark = SparkSession.builder()
             .appName("SparkBatchProcessor")
             .master("spark://192.168.56.101:7077")
-            .config("spark.mongodb.output.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&writeConcern=majority&readPreference=primaryPreferred&readConcernLevel=local")
+            .config("spark.mongodb.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic")
+            .config("spark.mongodb.read.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&readPreference=primaryPreferred&readConcernLevel=local")
+            .config("spark.mongodb.write.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&writeConcern=majority")
             .getOrCreate();
         
         return spark;
