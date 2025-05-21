@@ -30,7 +30,7 @@ public class SparkBatchProcessor {
                 "split(value, ',')[3] as station_name",
                 "split(value, ',')[0] as date",
                 "CAST(split(value, ',')[4] AS INT) as total_transits",
-                "CAST(split(value, ',')[1] AS INT) as day_of_week",
+                "split(value, ',')[1] as day_of_week",
                 "CAST(split(value, ',')[4] AS INT) as week"
             ).withColumn("date",
                 to_timestamp(
