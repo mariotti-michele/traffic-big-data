@@ -14,7 +14,9 @@ public class SparkBatchProcessor {
         SparkSession spark = SparkSession.builder()
             .appName("SparkBatchProcessor")
             .master("spark://192.168.56.101:7077")
-            .config("spark.mongodb.output.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&writeConcern=majority&readPreference=primaryPreferred&readConcernLevel=local")
+            .config("spark.mongodb.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic")
+            .config("spark.mongodb.read.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&readPreference=primaryPreferred&readConcernLevel=local")
+            .config("spark.mongodb.write.connection.uri", "mongodb://192.168.56.101,192.168.56.102,192.168.56.103/traffic?replicaSet=rstraffic&writeConcern=majority")
             .getOrCreate();
         
         return spark;
@@ -39,8 +41,9 @@ public class SparkBatchProcessor {
             );
 
         df.write()
-            .format("mongo")
+            .format("mongodb")
             .mode(SaveMode.Append)
+            .option("database", "traffic")
             .option("collection", "daily_transits")
             .save();
 
@@ -49,7 +52,7 @@ public class SparkBatchProcessor {
 
     private static void updateStatistics(SparkSession spark) {
         Dataset<Row> df = spark.read()
-            .format("mongo")
+            .format("mongodb")
             .load()
             .withColumn("date", to_date(col("date"), "yyyy-MM-dd"));
 
@@ -75,8 +78,9 @@ public class SparkBatchProcessor {
             .join(updatedTo, "station_id");
 
         result.write()
-            .format("mongo")
+            .format("mongodb")
             .mode(SaveMode.Overwrite)
+            .option("database", "traffic")
             .option("collection", "station_stats")
             .save();
     }
