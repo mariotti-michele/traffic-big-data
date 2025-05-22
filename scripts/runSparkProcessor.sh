@@ -7,5 +7,3 @@ echo "Avvio Spark Batch Processor..."
 spark-submit \
   --class bigdataman.mm.SparkBatchProcessor \
   spark-batch-processor-1.0-SNAPSHOT.jar
-  
-sleep 20

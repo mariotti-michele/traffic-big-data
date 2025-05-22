@@ -20,3 +20,5 @@ sleep 7
 echo "Avvio Kafka..."
 kafka-server-start.sh ~/kafka/config/server.properties
 sleep 7
+
+

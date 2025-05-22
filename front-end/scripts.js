@@ -24,6 +24,11 @@ async function fetchAndRenderData(stationId) {
   renderCharts(data);
 }
 
+stationSelect.addEventListener("change", () => {
+  if (lineChart) lineChart.resetZoom();
+  fetchAndRenderData(stationSelect.value);
+});
+
 function renderCharts(data) {
   const { transits, stats } = data;
 
@@ -104,6 +109,9 @@ function renderCharts(data) {
                 enabled: true
               },
               mode: 'x',
+            },
+             limits: {
+              y: { min: 0 }
             }
           }
         }
