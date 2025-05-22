@@ -6,9 +6,16 @@
   <title>Monitoraggio Traffico</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="libs/chart.js"></script>
+  <script src="libs/hammer.min.js"></script>
+  <script src="libs/chartjs-plugin-zoom.min.js"></script>
 </head>
 <body>
   <h1>Monitoraggio Traffico</h1>
+
+  <div style="text-align:center; margin-bottom: 15px;">
+    <h2 id="stationName"></h2>
+    <span id="lastUpdate" style=" color: #666;"></span>
+  </div>
 
   <div class="select-wrapper">
     <label for="stationSelect">Seleziona Postazione:</label>

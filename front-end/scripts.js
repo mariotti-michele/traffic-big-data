@@ -1,4 +1,6 @@
 const stationSelect = document.getElementById("stationSelect");
+const stationNameEl = document.getElementById("stationName");
+const lastUpdateEl = document.getElementById("lastUpdate");
 let lineChart, barChartDay, barChartWeek;
 
 async function fetchStationIds() {
@@ -10,6 +12,15 @@ async function fetchStationIds() {
 async function fetchAndRenderData(stationId) {
   const res = await fetch(`http://localhost:3000/station/${stationId}`);
   const data = await res.json();
+  stationNameEl.textContent = `Postazione: ${data.transits[0].station_name}`;
+  if (data.transits && data.transits.length > 0) {
+    const dates = data.transits.map(e => e.date);
+    dates.sort();
+    const lastDate = dates[dates.length - 1];
+    lastUpdateEl.textContent = `Dati aggiornati al ${lastDate}`;
+  } else {
+    lastUpdateEl.textContent = "";
+  }
   renderCharts(data);
 }
 
@@ -23,31 +34,82 @@ function renderCharts(data) {
   const avgLine = new Array(dates.length).fill(dailyAvg);
 
   // Line Chart
-  if (lineChart) lineChart.destroy();
-  lineChart = new Chart(document.getElementById("lineChart"), {
-    type: "line",
-    data: {
-      labels: dates,
-      datasets: [
-        {
-          label: "Transiti Totali",
-          data: totalTransits,
-          borderColor: "blue",
-          fill: false,
+  if (lineChart){
+    //lineChart.destroy();
+    lineChart.data.labels = dates;
+    lineChart.data.datasets[0].data = totalTransits;
+    lineChart.data.datasets[1].data = avgLine;
+    lineChart.update();
+  } else {
+    lineChart = new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            label: "Transiti Totali",
+            data: totalTransits,
+            borderColor: "blue",
+            fill: false,
+            borderWidth: dates.length > 100 ? 1 : 2,
+          },
+          {
+            label: "Media Giornaliera",
+            data: avgLine,
+            borderColor: "red",
+            borderDash: [5, 5],
+            fill: false,
+            borderWidth: dates.length > 100 ? 1 : 2,
+          }
+        ],
+      },
+      options: {
+        animation: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Data"
+            },
+            ticks: {
+              callback: function(value, index, ticks) {
+                const step = dates.length > 30 ? Math.ceil(dates.length / 10) : 1;
+                return index % step === 0 ? this.getLabelForValue(value) : "";
+              }
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: "Numero di Transiti"
+            },
+            ticks: {
+              callback: function(value) { return Math.round(value); },
+            },
+          }
         },
-        {
-          label: "Media Giornaliera",
-          data: avgLine,
-          borderColor: "red",
-          borderDash: [5, 5],
-          fill: false,
+        plugins: {
+          zoom: {
+            pan: {
+              enabled: true,
+              mode: 'xy',
+              threshold: 1, 
+              modifierKey: null,
+            },
+            zoom: {
+              wheel: {
+                enabled: true,
+              },
+              pinch: {
+                enabled: true
+              },
+              mode: 'x',
+            }
+          }
         }
-      ],
-    },
-    options: {
-      animation: false
-    }
-  });
+      }
+    });
+  }
 
   // Day of Week Bar Chart
   const dayAvg = stats[0]?.day_of_week_avg || {};
@@ -67,6 +129,20 @@ function renderCharts(data) {
     },
     options: {
       animation: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Giorno della Settimana"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Media Transiti"
+          }
+        }
+      }
     }
   });
 
@@ -89,6 +165,20 @@ function renderCharts(data) {
     options: {
       animation: false,
       indexAxis: "y",
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Totale Transiti"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Settimana"
+          }
+        }
+      }
     }
   });
 }
