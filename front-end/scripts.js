@@ -76,12 +76,6 @@ function renderCharts(data) {
               display: true,
               text: "Data"
             },
-            ticks: {
-              callback: function(value, index, ticks) {
-                const step = dates.length > 30 ? Math.ceil(dates.length / 10) : 1;
-                return index % step === 0 ? this.getLabelForValue(value) : "";
-              }
-            }
           },
           y: {
             title: {
