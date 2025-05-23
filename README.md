@@ -19,14 +19,14 @@ L’obiettivo del progetto è:
 
 ## DATASET
 
-I dati utilizzati provengono dal **Sistema di Monitoraggio regionale dei flussi di Traffico Stradali (MTS) dell'Emilia-Romagna** e sono accessibili al seguente link:  
+I dati utilizzati provengono dal Sistema di Monitoraggio regionale dei flussi di Traffico Stradali (MTS) dell'Emilia-Romagna e sono accessibili al seguente link:  
 https://serviziambiente.regione.emilia-romagna.it/portaleviabilita/flussi
 
-In particolare, i dati selezionati rappresentano il numero di transiti giornalieri per ciascuna postazione, nel periodo compreso tra il **1° gennaio 2025 e il 31 marzo 2025**.
+In particolare, i dati selezionati rappresentano il numero di transiti giornalieri per ciascuna postazione, nel periodo compreso tra il 1° gennaio 2025 e il 31 marzo 2025.
 
-È stata fatta una **pulizia dei dati** prima del loro utilizzo attraverso uno script Python.
+È stata fatta una pulizia dei dati prima del loro utilizzo attraverso uno script Python.
 
-L'invio dei dati viene **simulato come se avvenisse attraverso operazioni batch a fine giornata da parte dei sensori**.
+L'invio dei dati viene simulato come se avvenisse attraverso operazioni batch a fine giornata da parte dei sensori.
 
 ---
 
@@ -34,12 +34,12 @@ L'invio dei dati viene **simulato come se avvenisse attraverso operazioni batch 
 
 Per eseguire correttamente il progetto è necessario installare le seguenti tecnologie sulle macchine virtuali:
 
-- **Java:** versione 21.0.6
-- **Apache Kafka:** versione 2.8.1
-- **Apache Spark:** versione 3.5.4
-- **MongoDB:** versione 8.0.4
+- Java: versione 21.0.6
+- Apache Kafka: versione 2.8.1
+- Apache Spark: versione 3.5.4
+- MongoDB: versione 8.0.4
 
-Inoltre sono stati utilizzati anche **Python** e **Maven** durante lo sviluppo del sistema.
+Inoltre sono stati utilizzati anche Python e Maven durante lo sviluppo del sistema.
 
 ---
 
@@ -47,7 +47,7 @@ Inoltre sono stati utilizzati anche **Python** e **Maven** durante lo sviluppo d
 
 ### Connessione delle Macchine Virtuali
 
-Sono state utilizzate **tre macchine virtuali (VM)**, connesse tra loro tramite **rete interna** per semplificare la comunicazione tra i nodi del sistema.
+Sono state utilizzate tre macchine virtuali (VM), connesse tra loro tramite rete interna per semplificare la comunicazione tra i nodi del sistema.
 
 È necessario modificare il file `/etc/hosts` su ciascuna VM aggiungendo le seguenti righe:
 
@@ -78,17 +78,17 @@ kafka-topics.sh --create --topic traffic --bootstrap-server 192.168.56.101:9092 
 
 Modificare il file `/etc/mongod.conf` per ogni macchina:
 
-- **Master (192.168.56.101)**
+- Master (192.168.56.101)
   ```
   net:
     bindIp: 192.168.56.101
   ```
-- **Worker1 (192.168.56.102)**
+- Worker1 (192.168.56.102)
   ```
   net:
     bindIp: 192.168.56.102
   ```
-- **Worker2 (192.168.56.103)**
+- Worker2 (192.168.56.103)
   ```
   net:
     bindIp: 192.168.56.103
@@ -117,11 +117,11 @@ rs.initiate({
 
 Per il corretto funzionamento del cluster Spark, è necessario modificare il file `conf/spark-env.sh` su tutte le VM.
 
-- **Nodo Master:**
+- Nodo Master:
   ```
   export SPARK_MASTER_HOST=192.168.56.101
   ```
-- **Nodi Worker:**
+- Nodi Worker:
   ```
   export SPARK_WORKER_CORES=1
   export SPARK_WORKER_MEMORY=2g
@@ -133,25 +133,25 @@ Per il corretto funzionamento del cluster Spark, è necessario modificare il fil
 
 ### Trasmissione dati tramite Kafka Producer
 
-I dati vengono pubblicati nel topic `traffic` simulando **operazioni batch a fine giornata da parte di 2 sensori** (interpretati dai nodi worker).
+I dati vengono pubblicati nel topic `traffic` simulando operazioni batch a fine giornata da parte di 2 sensori (interpretati dai nodi worker).
 
-Ogni nodo worker si occupa di **una partizione del dataset**.  
+Ogni nodo worker si occupa di una partizione del dataset.  
 La partizione è stata fatta dividendo le postazioni in due sottoinsiemi in modo equo.
 
-Nella nostra simulazione **si svolge una giornata ogni 20 secondi** per poterlo testare velocemente.
+Nella nostra simulazione si svolge una giornata ogni 20 secondi per poterlo testare velocemente.
 
 ### Elaborazione Batch con Apache Spark (Kafka Consumer)
 
-Nel progetto è stato implementato un componente in **Apache Spark** con il ruolo di consumer dei dati trasmessi su Kafka, sottoscrivendosi al topic `traffic`.
+Nel progetto è stato implementato un componente in Apache Spark con il ruolo di consumer dei dati trasmessi su Kafka, sottoscrivendosi al topic `traffic`.
 
-Al fine di simulare l’elaborazione giornaliera dei dati in un contesto accelerato, è stata introdotta una variabile che rappresenta la data corrente simulata, inizialmente impostata al **01/01/25**.
+Al fine di simulare l’elaborazione giornaliera dei dati in un contesto accelerato, è stata introdotta una variabile che rappresenta la data corrente simulata, inizialmente impostata al 01/01/25.
 
 Il batch processing segue questa logica:
 
-1. **Verifica la presenza di un messaggio di fine giornata** (formato: `END_OF_DAY:<data>`) da parte di entrambi i sensori per la giornata corrente.
-2. In caso affermativo, **elabora tutti i dati raccolti** per quella giornata e **calcola le relative statistiche**.
-3. I risultati aggregati vengono **salvati all’interno del database MongoDB**.
-4. La variabile di data corrente viene **aggiornata al giorno successivo**.
+1. Verifica la presenza di un messaggio di fine giornata (formato: `END_OF_DAY:<data>`) da parte di entrambi i sensori per la giornata corrente.
+2. In caso affermativo, elabora tutti i dati raccolti per quella giornata e calcola le relative statistiche.
+3. I risultati aggregati vengono salvati all’interno del database MongoDB.
+4. La variabile di data corrente viene aggiornata al giorno successivo.
 
 Questa logica si è resa necessaria per gestire correttamente la simulazione di tempo accelerato:  
 in uno scenario reale, l’elaborazione avverrebbe naturalmente a fine giornata (es. alle 23:59), ma nella simulazione un giorno corrisponde a 20 secondi, e il sistema deve poter riconoscere e reagire dinamicamente alla conclusione della giornata simulata.
@@ -173,7 +173,7 @@ in uno scenario reale, l’elaborazione avverrebbe naturalmente a fine giornata 
 }
 ```
 
-Questi documenti vengono memorizzati nella collezione **daily_transits**, che cresce quotidianamente.
+Questi documenti vengono memorizzati nella collezione daily_transits, che cresce quotidianamente.
 
 È stato scelto di integrare direttamente il nome della postazione all’interno di ciascun documento, anziché creare una collezione separata, poiché il nome non cambia mai e ciò consente query più rapide e semplici nel contesto della nostra applicazione.
 
@@ -186,17 +186,19 @@ Questi documenti vengono memorizzati nella collezione **daily_transits**, che cr
   "day_of_week_avg": {
     "1": 8231,
     "2": 8120,
+    ...
     "7": 7800
   },
   "weekly_total": {
     "1": 54100,
     "2": 56780
+    ...
   },
   "updated_to": "2025-03-31"
 }
 ```
 
-Questi documenti sono salvati nella collezione **station_stats**, che non cresce nel tempo, ma viene semplicemente aggiornata quotidianamente con statistiche aggiornate per ciascuna postazione.
+Questi documenti sono salvati nella collezione station_stats, che non cresce nel tempo, ma viene semplicemente aggiornata quotidianamente con statistiche aggiornate per ciascuna postazione.
 
 Le statistiche sono state aggregate per postazione, con l’obiettivo di rendere più efficiente e immediato l’accesso ai dati nella nostra applicazione.
 
@@ -207,10 +209,10 @@ Le statistiche sono state aggregate per postazione, con l’obiettivo di rendere
 - `readPreference`: `"primaryPreferred"`
 - `readConcern`: `"local"`
 
-Abbiamo scelto di privilegiare la **disponibilità rispetto alla consistenza nella lettura dei dati**.  
+Abbiamo scelto di privilegiare la disponibilità rispetto alla consistenza nella lettura dei dati.  
 Questa decisione è motivata dal fatto che, nel contesto della nostra applicazione, l’unico potenziale problema di consistenza riguarda la possibilità che il nodo master disponga di dati più aggiornati rispetto ad un nodo secondario. Tuttavia, anche in tal caso, i dati presenti sul secondario non sarebbero errati, ma semplicemente riferiti a un momento precedente e non aggiornati all’ultimo giorno disponibile.
 
-Inoltre, la nostra interfaccia ha uno **scopo esclusivamente consultivo**: viene utilizzata solo per la visualizzazione dei dati, senza possibilità di modificarli. Questo rende accettabile una minore consistenza in favore di una maggiore disponibilità.
+Inoltre, la nostra interfaccia ha uno scopo esclusivamente consultivo: viene utilizzata solo per la visualizzazione dei dati, senza possibilità di modificarli. Questo rende accettabile una minore consistenza in favore di una maggiore disponibilità.
 
 ### Preferenza di scrittura
 
@@ -222,15 +224,15 @@ Evita perdita di dati in caso di crash del PRIMARY subito dopo la scrittura.
 
 ## VISUALIZZAZIONE DATI
 
-È stato realizzato un **server Node.js** che fornisce **API per leggere dati tramite operazioni GET da MongoDB**.
+È stato realizzato un server Node.js che fornisce API per leggere dati tramite operazioni GET da MongoDB.
 
-Per quanto riguarda il front-end è stata utilizzata la tecnologia **HTML + CSS + JS**.
+Per quanto riguarda il front-end è stata utilizzata la tecnologia HTML + CSS + JS.
 
-Una volta selezionata la postazione che si intende visionare, vengono mostrati **3 grafici**:
+Una volta selezionata la postazione che si intende visionare, vengono mostrati 3 grafici:
 
-- **line chart** con transiti giornalieri e relativa media;
-- **bar chart** con transiti medi per ogni giorno della settimana;
-- **bar chart** per transiti totali settimanali.
+- line chart con transiti giornalieri e relativa media;
+- bar chart con transiti medi per ogni giorno della settimana;
+- bar chart per transiti totali settimanali.
 
 ---
 
@@ -262,24 +264,3 @@ Per eliminare tutti i dati dal database `traffic` di MongoDB, eseguire il seguen
 - `deleteDB.sh`
 
 ---
-
-**Indice del documento:**
-- Monitoraggio Traffico Stradale
-  - OBIETTIVO
-  - DATASET
-  - SPECIFICHE E ARCHITETTURA
-  - CONFIGURAZIONE
-    - Connessione delle Macchine Virtuali
-    - Configurazione di Kafka
-    - Configurazione MongoDB
-    - Configurazione di Spark
-  - SVILUPPO
-    - Trasmissione dati tramite Kafka Producer
-    - Ogni nodo worker si occupa di una partizione del dataset. La partizione è stata fatta dividendo le postazioni in due sottoinsiemi in modo equo.
-    - Elaborazione Batch con Apache Spark (Kafka Consumer)
-  - Memorizzazione dati in MongoDB
-  - Visualizzazione dati
-  - AVVIO E ARRESTO DEL SISTEMA
-    - Avvio del Sistema
-    - Arresto del Sistema
-    - Reset del Database
