@@ -22,13 +22,13 @@ const mockData = {
       {
         daily_avg: 131,
         day_of_week_avg: {
-          lun: 130,
-          mar: 125,
-          mer: 140,
-          gio: 120,
-          ven: 140,
-          sab: 135,
-          dom: 130
+          1: 130,
+          2: 125,
+          3: 140,
+          4: 120,
+          5: 140,
+          6: 135,
+          7: 130
         },
         weekly_total: {
           "12": 900,
