@@ -158,9 +158,9 @@ in uno scenario reale, l’elaborazione avverrebbe naturalmente a fine giornata 
 
 ---
 
-## MEMORIZZAZIONE DATI IN MONGODB
+### MEMORIZZAZIONE DATI IN MONGODB
 
-### Struttura documenti transiti giornalieri
+#### Struttura documenti transiti giornalieri
 
 ```json
 {
@@ -177,7 +177,7 @@ Questi documenti vengono memorizzati nella collezione daily_transits, che cresce
 
 È stato scelto di integrare direttamente il nome della postazione all’interno di ciascun documento, anziché creare una collezione separata, poiché il nome non cambia mai e ciò consente query più rapide e semplici nel contesto della nostra applicazione.
 
-### Struttura documenti statistiche
+#### Struttura documenti statistiche
 
 ```json
 {
@@ -204,7 +204,7 @@ Le statistiche sono state aggregate per postazione, con l’obiettivo di rendere
 
 ---
 
-### Preferenze di lettura
+#### Preferenze di lettura
 
 - `readPreference`: `"primaryPreferred"`
 - `readConcern`: `"local"`
@@ -214,7 +214,7 @@ Questa decisione è motivata dal fatto che, nel contesto della nostra applicazio
 
 Inoltre, la nostra interfaccia ha uno scopo esclusivamente consultivo: viene utilizzata solo per la visualizzazione dei dati, senza possibilità di modificarli. Questo rende accettabile una minore consistenza in favore di una maggiore disponibilità.
 
-### Preferenza di scrittura
+#### Preferenza di scrittura
 
 - `writeConcern`: `"majority"`
 
@@ -222,7 +222,7 @@ Evita perdita di dati in caso di crash del PRIMARY subito dopo la scrittura.
 
 ---
 
-## VISUALIZZAZIONE DATI
+### VISUALIZZAZIONE DATI
 
 È stato realizzato un server Node.js che fornisce API per leggere dati tramite operazioni GET da MongoDB.
 
