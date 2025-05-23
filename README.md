@@ -41,7 +41,7 @@ Per eseguire correttamente il progetto è necessario installare le seguenti tecn
 
 Inoltre sono stati utilizzati anche Python e Maven durante lo sviluppo del sistema.
 
-![Architettura Big Data](img/architettura-bigdata.jpg)
+<img src="img/architettura-bigdata.jpg" width="60%">
 
 ---
 
