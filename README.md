@@ -158,9 +158,7 @@ Il batch processing segue questa logica:
 Questa logica si è resa necessaria per gestire correttamente la simulazione di tempo accelerato:  
 in uno scenario reale, l’elaborazione avverrebbe naturalmente a fine giornata (es. alle 23:59), ma nella simulazione un giorno corrisponde a 20 secondi, e il sistema deve poter riconoscere e reagire dinamicamente alla conclusione della giornata simulata.
 
----
-
-### MEMORIZZAZIONE DATI IN MONGODB
+### Memorizzazione dati in MongoDB
 
 #### Struttura documenti transiti giornalieri
 
@@ -204,8 +202,6 @@ Questi documenti sono salvati nella collezione station_stats, che non cresce nel
 
 Le statistiche sono state aggregate per postazione, con l’obiettivo di rendere più efficiente e immediato l’accesso ai dati nella nostra applicazione.
 
----
-
 #### Preferenze di lettura
 
 - `readPreference`: `"primaryPreferred"`
@@ -222,9 +218,7 @@ Inoltre, la nostra interfaccia ha uno scopo esclusivamente consultivo: viene uti
 
 Evita perdita di dati in caso di crash del PRIMARY subito dopo la scrittura.
 
----
-
-### VISUALIZZAZIONE DATI
+### Visualizzazione dati
 
 È stato realizzato un server Node.js che fornisce API per leggere dati tramite operazioni GET da MongoDB.
 
