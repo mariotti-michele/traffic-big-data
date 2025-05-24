@@ -1,7 +1,7 @@
 
 # Monitoraggio Traffico Stradale
 
-**Documento di progetto del corso DATA INTENSIVE APPLICATION AND BIG DATA**  
+**Progetto del corso DATA INTENSIVE APPLICATION AND BIG DATA**  
 **Autori:** Michele Mariotti, Martin Arsoski
 
 ---
