@@ -202,8 +202,6 @@ Questi documenti sono salvati nella collezione station_stats, che non cresce nel
 
 Le statistiche sono state aggregate per postazione, con l’obiettivo di rendere più efficiente e immediato l’accesso ai dati nella nostra applicazione.
 
----
-
 #### Preferenze di lettura
 
 - `readPreference`: `"primaryPreferred"`
