@@ -230,6 +230,9 @@ Una volta selezionata la postazione che si intende visionare, vengono mostrati 3
 - bar chart con transiti medi per ogni giorno della settimana;
 - bar chart per transiti totali settimanali.
 
+<img src="img/schermata1" width="80%">
+<img src="img/schermata3" width="80%">
+<img src="img/schermata2" width="80%">
 ---
 
 ## AVVIO E ARRESTO DEL SISTEMA
