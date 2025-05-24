@@ -178,11 +178,10 @@ function renderCharts(data) {
 
     for (let i = 0; i < totals.length; i++) {
     let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + (i === 0 ? 4 : 6)); // 5 giorni la prima, poi 7 giorni
+    endDate.setDate(startDate.getDate() + (i === 0 ? 4 : 6));
 
     weekLabels.push(`${format(startDate)} - ${format(endDate)}`);
 
-    // Nuovo startDate = giorno dopo la fine della settimana precedente
     startDate = new Date(endDate);
     startDate.setDate(startDate.getDate() + 1);
     }

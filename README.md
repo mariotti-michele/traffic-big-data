@@ -186,13 +186,13 @@ Questi documenti vengono memorizzati nella collezione daily_transits, che cresce
   "day_of_week_avg": {
     "1": 8231,
     "2": 8120,
-    ...
+    "...": "...",
     "7": 7800
   },
   "weekly_total": {
     "1": 54100,
-    "2": 56780
-    ...
+    "2": 56780,
+    "...": "...",
   },
   "updated_to": "2025-03-31"
 }
@@ -233,6 +233,7 @@ Una volta selezionata la postazione che si intende visionare, vengono mostrati 3
 <img src="img/schermata1.png" width="80%">
 <img src="img/schermata3.png" width="80%">
 <img src="img/schermata2.png" width="80%">
+
 ---
 
 ## AVVIO E ARRESTO DEL SISTEMA
