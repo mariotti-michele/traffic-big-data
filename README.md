@@ -41,7 +41,9 @@ Per eseguire correttamente il progetto è necessario installare le seguenti tecn
 
 Inoltre sono stati utilizzati anche Python e Maven durante lo sviluppo del sistema.
 
-<img src="img/architettura-bigdata.jpg" width="60%">
+<p align="center">
+  <img src="img/architettura-bigdata.jpg" width="60%">
+</p>
 
 ---
 
@@ -230,9 +232,15 @@ Una volta selezionata la postazione che si intende visionare, vengono mostrati 3
 - bar chart con transiti medi per ogni giorno della settimana;
 - bar chart per transiti totali settimanali.
 
-<img src="img/schermata1.png" width="80%">
-<img src="img/schermata3.png" width="80%">
-<img src="img/schermata2.png" width="80%">
+<p align="center">
+  <img src="img/schermata1.png" width="60%">
+</p>
+<p align="center">
+  <img src="img/schermata3.png" width="60%">
+</p>
+<p align="center">
+  <img src="img/schermata2.png" width="60%">
+</p>
 
 ---
 
