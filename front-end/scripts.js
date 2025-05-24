@@ -169,19 +169,22 @@ function renderCharts(data) {
     const weekLabels = [];
     let startDate = new Date(sortedDates[0]);
 
+    const format = (date) =>
+    date.toLocaleDateString("it-IT", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+    });
+
     for (let i = 0; i < totals.length; i++) {
-        let endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + (i === 0 ? 4 : 6));
+    let endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + (i === 0 ? 4 : 6)); // 5 giorni la prima, poi 7 giorni
 
-        const format = (date) => date.toLocaleDateString("it-IT", {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit'
-        });
+    weekLabels.push(`${format(startDate)} - ${format(endDate)}`);
 
-        weekLabels.push(`${format(startDate)} - ${format(endDate)}`);
-
-        startDate.setDate(endDate.getDate() + 1);
+    // Nuovo startDate = giorno dopo la fine della settimana precedente
+    startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() + 1);
     }
 
     if (barChartWeek) barChartWeek.destroy();

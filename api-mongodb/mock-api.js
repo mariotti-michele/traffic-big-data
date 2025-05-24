@@ -12,7 +12,7 @@ const mockData = {
   A1: {
     station_id: "A1",
     transits: [
-      { date: "2025-03-25", total_transits: 120 },
+      { date: "2025-01-01", total_transits: 120 },
       { date: "2025-03-26", total_transits: 135 },
       { date: "2025-03-27", total_transits: 150 },
       { date: "2025-03-28", total_transits: 110 },
@@ -31,6 +31,17 @@ const mockData = {
           7: 130
         },
         weekly_total: {
+          "1": 700,
+          "2": 800,
+          "3": 750,
+          "4": 650,
+          "5": 900,
+          "6": 850,
+          "7": 800,
+          "8": 700,
+          "9": 600,
+          "10": 500,
+          "11": 600,
           "12": 900,
           "13": 950
         },
