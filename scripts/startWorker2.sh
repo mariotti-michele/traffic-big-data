@@ -8,7 +8,7 @@ sudo service mongod start &
 sleep 10
 
 echo "[Worker 2] Avvio Spark Worker..."
-start-worker.sh spark://192.168.56.101:7077 &
+start-worker.sh spark://192.168.56.101:7077 
 sleep 10
 
 echo "[Worker 2] Avvio Kafka Producer sensore 2..."
